@@ -1,20 +1,20 @@
 /**
- * Utility class for Base64 encoding and decoding.
- * Used to avoid storing sensitive values (e.g., passwords) as plaintext
- * in environment configuration files.
+ * Clase utilitaria para codificación y decodificación en Base64.
+ * Se usa para evitar almacenar valores sensibles (ej. contraseñas) como texto plano
+ * en los archivos de configuración de entorno.
  */
 export class Base64 {
   /**
-   * Encodes a plain string to Base64.
-   * @param value - The string to encode.
+   * Codifica una cadena de texto plano a Base64.
+   * @param value - La cadena a codificar.
    */
   static encode(value: string): string {
     return Buffer.from(value, 'utf-8').toString('base64');
   }
 
   /**
-   * Decodes a Base64 string back to plain text.
-   * @param value - The Base64 string to decode.
+   * Decodifica una cadena Base64 de vuelta a texto plano.
+   * @param value - La cadena Base64 a decodificar.
    */
   static decode(value: string): string {
     return Buffer.from(value, 'base64').toString('utf-8');

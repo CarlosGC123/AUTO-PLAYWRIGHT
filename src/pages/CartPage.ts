@@ -1,5 +1,5 @@
 /**
- * Page: Shopping Cart  (/cart.html)
+ * Página: Carrito de compras  (/cart.html)
  */
 export const CartPage = {
   cartContainer:          '#cart_contents_container',

@@ -2,7 +2,7 @@ module.exports = {
   default: {
     requireModule: ['ts-node/register'],
     require: ['src/hooks/**/*.ts', 'src/steps/**/*.ts'],
-    features: 'src/features/**/*.feature',
+    paths: ['src/features/**/*.feature'],
     format: [
       'progress',
       'json:reports/cucumber-report.json',
@@ -10,6 +10,7 @@ module.exports = {
     ],
     formatOptions: { snippetInterface: 'async-await' },
     publishQuiet: true,
-    parallel: 1
+    parallel: 0,
+    timeout: 300_000
   }
 };

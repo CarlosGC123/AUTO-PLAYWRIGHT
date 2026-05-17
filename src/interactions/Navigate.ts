@@ -1,15 +1,26 @@
 import { Page } from '@playwright/test';
+import { IInteraccionNavegar } from './types';
+import { FormatoConsola } from '../util/FormatoConsola';
 
 /**
- * Interaction: Navigate
- * Atomic action that moves the browser to a specified URL.
- * Playwright waits for the page to reach the 'load' state by default.
+ * Interacción: Navigate
+ * Dirige el navegador hacia una URL y espera que la página alcance
+ * el estado 'domcontentloaded' antes de continuar.
  */
-export const Navigate = {
-  /**
-   * Navigate directly to an absolute URL.
-   */
-  to: async (page: Page, url: string): Promise<void> => {
-    await page.goto(url, { waitUntil: 'domcontentloaded' });
+export const Navegar: IInteraccionNavegar = {
+
+  a: async (page: Page, url: string): Promise<void> => {
+    try {
+      FormatoConsola.accion(`Navegando a → ${url}`);
+
+      await page.goto(url, { waitUntil: 'domcontentloaded' });
+
+      FormatoConsola.exito(`Navegación completada → ${url}`);
+
+    } catch (error) {
+      FormatoConsola.error(`Error al navegar a: ${url}`, error);
+      throw error;
+    }
   }
 };
+

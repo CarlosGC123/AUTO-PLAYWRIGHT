@@ -1,5 +1,5 @@
 /**
- * Page: Checkout Step One – Customer Information  (/checkout-step-one.html)
+ * Página: Checkout Paso 1 – Información del cliente  (/checkout-step-one.html)
  */
 export const CheckoutOnePage = {
   firstNameInput: '[data-test="firstName"]',

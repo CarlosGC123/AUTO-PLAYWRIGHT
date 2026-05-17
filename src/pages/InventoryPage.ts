@@ -1,6 +1,6 @@
 /**
- * Page: Inventory / Products Page  (/inventory.html)
- * Holds selectors and dynamic selector builders for the product catalogue.
+ * Página: Inventario / Catálogo de productos  (/inventory.html)
+ * Contiene selectores y constructores de selectores dinámicos para el catálogo de productos.
  */
 export const InventoryPage = {
   pageTitle:          '.title',
@@ -10,9 +10,9 @@ export const InventoryPage = {
   cartLink:           '.shopping_cart_link',
 
   /**
-   * Resolves the "Add to cart" button selector for a given product name.
-   * Sauce Demo data-test format: add-to-cart-{product-name-dashed}
-   * Example: "Sauce Labs Backpack" → [data-test="add-to-cart-sauce-labs-backpack"]
+   * Resuelve el selector del botón "Agregar al carrito" para un producto dado.
+   * Formato data-test de Sauce Demo: add-to-cart-{nombre-producto-con-guiones}
+   * Ejemplo: "Sauce Labs Backpack" → [data-test="add-to-cart-sauce-labs-backpack"]
    */
   addToCartButton: (productName: string): string => {
     const productId = productName.toLowerCase().replace(/\s+/g, '-');
@@ -20,7 +20,7 @@ export const InventoryPage = {
   },
 
   /**
-   * Resolves the "Remove" button selector after a product has been added.
+   * Resuelve el selector del botón "Eliminar" después de que un producto ha sido agregado.
    */
   removeButton: (productName: string): string => {
     const productId = productName.toLowerCase().replace(/\s+/g, '-');

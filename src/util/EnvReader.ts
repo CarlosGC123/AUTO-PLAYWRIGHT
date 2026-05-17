@@ -1,18 +1,21 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+// Permite elegir el archivo de entorno desde fuera (tasks.json / launch.json).
+// Si no se especifica ENV_FILE, usa '.env' por defecto.
+const archivoEnv = process.env.ENV_FILE ?? '.env';
+dotenv.config({ path: path.resolve(process.cwd(), archivoEnv) });
 
 /**
- * Utility class to safely read environment variables.
- * Enforces required variables and provides typed defaults.
+ * Clase utilitaria para leer variables de entorno de forma segura.
+ * Hace obligatorias las variables requeridas y provee valores por defecto tipados.
  */
 export class EnvReader {
   /**
-   * Retrieves the value of an environment variable.
-   * @param key - The environment variable name.
-   * @param defaultValue - Optional fallback value if the key is not set.
-   * @throws Error if the variable is not defined and no default is provided.
+   * Obtiene el valor de una variable de entorno.
+   * @param key          - El nombre de la variable de entorno.
+   * @param defaultValue - Valor de respaldo opcional si la clave no está definida.
+   * @throws Error si la variable no está definida y no se proporcionó valor por defecto.
    */
   static get(key: string, defaultValue?: string): string {
     const value = process.env[key];
@@ -21,8 +24,8 @@ export class EnvReader {
         return defaultValue;
       }
       throw new Error(
-        `[EnvReader] Required environment variable "${key}" is not defined. ` +
-        `Check your .env file.`
+        `[EnvReader] La variable de entorno requerida "${key}" no está definida. ` +
+        `Verifica tu archivo .env.`
       );
     }
     return value;

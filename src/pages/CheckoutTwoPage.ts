@@ -1,5 +1,5 @@
 /**
- * Page: Checkout Step Two – Order Overview  (/checkout-step-two.html)
+ * Página: Checkout Paso 2 – Resumen del pedido  (/checkout-step-two.html)
  */
 export const CheckoutTwoPage = {
   summaryContainer: '#checkout_summary_container',

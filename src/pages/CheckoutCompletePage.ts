@@ -1,5 +1,5 @@
 /**
- * Page: Checkout Complete – Order Confirmation  (/checkout-complete.html)
+ * Página: Checkout Completo – Confirmación del pedido  (/checkout-complete.html)
  */
 export const CheckoutCompletePage = {
   completeHeader:      '.complete-header',

@@ -1,66 +1,122 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+﻿import { Given, When, Then } from '@cucumber/cucumber';
 import { CustomWorld } from '../hooks/CustomWorld';
-import { Navigate } from '../interactions/Navigate';
-import { Verify } from '../interactions/Verify';
-import { LoginTask } from '../tasks/LoginTask';
+import { Navegar } from '../interactions/Navigate';
+import { IniciarSesion } from '../interactions/Login';
 import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import { EnvReader } from '../util/EnvReader';
 import { Base64 } from '../util/Base64';
+import { FormatoConsola } from '../util/FormatoConsola';
+import { expect } from '@playwright/test';
 
-// ─── Given ───────────────────────────────────────────────────────────────────
+import { UrlContiene } from '../questions/UrlContiene';
+import { ElementoEsVisible } from '../questions/ElementoEsVisible';
+import { TextoContiene } from '../questions/TextoContiene';
+
+// --- Dado -----------------------------------------------------------------------
 
 Given(
-  'I am on the Sauce Demo login page',
+  'que estoy en la página de inicio de sesión de Sauce Demo',
   async function (this: CustomWorld) {
-    await Navigate.to(this.page, EnvReader.get('BASE_URL'));
+    try {
+      FormatoConsola.paso('Dado que estoy en la página de inicio de sesión de Sauce Demo');
+      await Navegar.a(this.page, EnvReader.get('BASE_URL'));
+    } catch (error) {
+      FormatoConsola.error('Error al navegar a la página de inicio de sesión', error);
+      throw error;
+    }
   }
 );
 
 /**
- * Shared step used by the Background sections of shopping.feature and
- * checkout.feature to establish a logged-in session.
+ * Paso compartido por los Antecedentes de shopping.feature y checkout.feature
+ * para establecer una sesión autenticada como precondición del escenario.
  */
-Given(
-  'I am logged in as {string}',
-  async function (this: CustomWorld, username: string) {
-    const password = Base64.decode(EnvReader.get('PASSWORD'));
-    await Navigate.to(this.page, EnvReader.get('BASE_URL'));
-    await LoginTask.perform(this.page, username, password);
+Given('que estoy autenticado como {string}',
+  async function (this: CustomWorld, usuario: string) {
+    try {
+      FormatoConsola.paso(`Dado que estoy autenticado como "${usuario}"`);
+      const contraseña = Base64.decode(EnvReader.get('PASSWORD'));
+      await Navegar.a(this.page, EnvReader.get('BASE_URL'));
+      await IniciarSesion.ejecutar(this.page, usuario, contraseña);
+    } catch (error) {
+      FormatoConsola.error(`Error al autenticarse como "${usuario}"`, error);
+      throw error;
+    }
   }
 );
 
-// ─── When ────────────────────────────────────────────────────────────────────
+// --- Cuando ---------------------------------------------------------------------
 
 When(
-  'I log in with username {string} and valid password',
-  async function (this: CustomWorld, username: string) {
-    const password = Base64.decode(EnvReader.get('PASSWORD'));
-    await LoginTask.perform(this.page, username, password);
+  'inicio sesión con el usuario {string} y la contraseña válida',
+  async function (this: CustomWorld, usuario: string) {
+    try {
+      FormatoConsola.paso(`Cuando inicio sesión con el usuario "${usuario}" y la contraseña válida`);
+      const contraseña = Base64.decode(EnvReader.get('PASSWORD'));
+      await IniciarSesion.ejecutar(this.page, usuario, contraseña);
+    } catch (error) {
+      FormatoConsola.error(`Error al iniciar sesión con usuario "${usuario}"`, error);
+      throw error;
+    }
   }
 );
 
 When(
-  'I log in with username {string} and password {string}',
-  async function (this: CustomWorld, username: string, password: string) {
-    await LoginTask.perform(this.page, username, password);
+  'inicio sesión con el usuario {string} y la contraseña {string}',
+  async function (this: CustomWorld, usuario: string, password: string) {
+    try {
+      FormatoConsola.paso(`Cuando inicio sesión con el usuario "${usuario}" y contraseña personalizada`);
+      await IniciarSesion.ejecutar(this.page, usuario, password);
+    } catch (error) {
+      FormatoConsola.error(`Error al iniciar sesión con usuario "${usuario}"`, error);
+      throw error;
+    }
   }
 );
 
-// ─── Then ────────────────────────────────────────────────────────────────────
+// --- Entonces -------------------------------------------------------------------
 
 Then(
-  'I should see the products page',
+  'debo ver la página de productos',
   async function (this: CustomWorld) {
-    await Verify.urlContains(this.page, 'inventory');
-    await Verify.isVisible(this.page, InventoryPage.pageTitle);
+    try {
+      FormatoConsola.paso('Entonces debo ver la página de productos');
+
+      const urlOk = await UrlContiene.ejecutar(this.page, 'inventory');
+      expect(urlOk).toBeTruthy();
+
+      const tituloVisible = await ElementoEsVisible.ejecutar(
+        this.page,
+        InventoryPage.pageTitle
+      );
+      expect(tituloVisible).toBeTruthy();
+
+      FormatoConsola.exito('Página de productos confirmada');
+    } catch (error) {
+      FormatoConsola.error('No se pudo confirmar la página de productos', error);
+      throw error;
+    }
   }
 );
 
 Then(
-  'I should see an error message {string}',
-  async function (this: CustomWorld, expectedMessage: string) {
-    await Verify.isVisible(this.page, LoginPage.errorMessage);
-    await Verify.containsText(this.page, LoginPage.errorMessage, expectedMessage);
+  'debo ver el mensaje de error {string}',
+  async function (this: CustomWorld, mensajeEsperado: string) {
+    try {
+      FormatoConsola.paso(`Entonces debo ver el mensaje de error "${mensajeEsperado}"`);
+
+      const contieneTexto = await TextoContiene.ejecutar(
+        this.page,
+        LoginPage.errorMessage,
+        mensajeEsperado
+      );
+      expect(contieneTexto).toBeTruthy();
+
+      FormatoConsola.exito(`Mensaje de error confirmado: "${mensajeEsperado}"`);
+    } catch (error) {
+      FormatoConsola.error(`No se encontró el mensaje de error: "${mensajeEsperado}"`, error);
+      throw error;
+    }
   }
 );

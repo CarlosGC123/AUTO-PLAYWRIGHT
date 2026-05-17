@@ -1,7 +1,7 @@
 /**
- * Page: Login Page  (/)
- * Holds all stable CSS/data-test selectors for the Sauce Demo login page.
- * No logic — only element references.
+ * Página: Login  (/)
+ * Contiene todos los selectores CSS/data-test estables de la página de inicio de sesión.
+ * Sin lógica — solo referencias a elementos.
  */
 export const LoginPage = {
   usernameInput:  '[data-test="username"]',

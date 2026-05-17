@@ -1,54 +1,87 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+﻿import { Given, When, Then } from '@cucumber/cucumber';
 import { CustomWorld } from '../hooks/CustomWorld';
-import { Verify } from '../interactions/Verify';
-import { AddProductTask } from '../tasks/AddProductTask';
-import { ViewCartTask } from '../tasks/ViewCartTask';
+import { Verificar } from '../interactions/Verificar';
+import { AgregarProductoTask } from '../tasks/AgregarProducto';
+import { VerCarritoTask } from '../tasks/VerCarrito';
 import { InventoryPage } from '../pages/InventoryPage';
 import { CartPage } from '../pages/CartPage';
+import { FormatoConsola } from '../util/FormatoConsola';
 
-// ─── Given ───────────────────────────────────────────────────────────────────
+// --- Dado -----------------------------------------------------------------------
 
 /**
- * Used in Background sections to add a product as a precondition.
- * Reads naturally as "And I have added X to the cart".
+ * Usado en los Antecedentes de checkout.feature para agregar un producto
+ * como precondición del escenario.
  */
 Given(
-  'I have added {string} to the cart',
-  async function (this: CustomWorld, productName: string) {
-    await AddProductTask.perform(this.page, productName);
+  'he agregado {string} al carrito',
+  async function (this: CustomWorld, nombreProducto: string) {
+    try {
+      FormatoConsola.paso(`Dado que he agregado "${nombreProducto}" al carrito`);
+      await AgregarProductoTask.ejecutar(this.page, nombreProducto);
+    } catch (error) {
+      FormatoConsola.error(`Error al agregar "${nombreProducto}" al carrito`, error);
+      throw error;
+    }
   }
 );
 
-// ─── When ────────────────────────────────────────────────────────────────────
+// --- Cuando ---------------------------------------------------------------------
 
 When(
-  'I add the product {string} to the cart',
-  async function (this: CustomWorld, productName: string) {
-    await AddProductTask.perform(this.page, productName);
+  'agrego el producto {string} al carrito',
+  async function (this: CustomWorld, nombreProducto: string) {
+    try {
+      FormatoConsola.paso(`Cuando agrego el producto "${nombreProducto}" al carrito`);
+      await AgregarProductoTask.ejecutar(this.page, nombreProducto);
+    } catch (error) {
+      FormatoConsola.error(`Error al agregar el producto "${nombreProducto}" al carrito`, error);
+      throw error;
+    }
   }
 );
 
 When(
-  'I navigate to the shopping cart',
+  'navego al carrito de compras',
   async function (this: CustomWorld) {
-    await ViewCartTask.perform(this.page);
+    try {
+      FormatoConsola.paso('Cuando navego al carrito de compras');
+      await VerCarritoTask.ejecutar(this.page);
+    } catch (error) {
+      FormatoConsola.error('Error al navegar al carrito de compras', error);
+      throw error;
+    }
   }
 );
 
-// ─── Then ────────────────────────────────────────────────────────────────────
+// --- Entonces -------------------------------------------------------------------
 
 Then(
-  'the cart badge should show {string} item(s)',
-  async function (this: CustomWorld, expectedCount: string) {
-    await Verify.isVisible(this.page, InventoryPage.cartBadge);
-    await Verify.hasExactText(this.page, InventoryPage.cartBadge, expectedCount);
+  /^el indicador del carrito debe mostrar "([^"]+)" artículo\(s\)$/,
+  async function (this: CustomWorld, cantidadEsperada: string) {
+    try {
+      FormatoConsola.paso(`Entonces el indicador del carrito debe mostrar "${cantidadEsperada}" artículo(s)`);
+      await Verificar.esVisible(this.page, InventoryPage.cartBadge);
+      await Verificar.tieneTextoExacto(this.page, InventoryPage.cartBadge, cantidadEsperada);
+      FormatoConsola.exito(`Indicador del carrito muestra "${cantidadEsperada}"`);
+    } catch (error) {
+      FormatoConsola.error(`El indicador del carrito no muestra "${cantidadEsperada}"`, error);
+      throw error;
+    }
   }
 );
 
 Then(
-  'I should see {string} in the cart',
-  async function (this: CustomWorld, productName: string) {
-    await Verify.urlContains(this.page, 'cart');
-    await Verify.containsText(this.page, CartPage.itemName, productName);
+  'debo ver {string} en el carrito',
+  async function (this: CustomWorld, nombreProducto: string) {
+    try {
+      FormatoConsola.paso(`Entonces debo ver "${nombreProducto}" en el carrito`);
+      await Verificar.urlContiene(this.page, 'cart');
+      await Verificar.contieneTexto(this.page, CartPage.itemName, nombreProducto);
+      FormatoConsola.exito(`Producto "${nombreProducto}" visible en el carrito`);
+    } catch (error) {
+      FormatoConsola.error(`El producto "${nombreProducto}" no se encontró en el carrito`, error);
+      throw error;
+    }
   }
 );

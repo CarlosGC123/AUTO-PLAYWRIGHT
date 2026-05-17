@@ -1,20 +1,21 @@
+# language: es
 @shopping
-Feature: Shopping Cart Management
+Característica: Gestión del carrito de compras
 
-  As a Sauce Demo customer
-  I want to be able to add products to my cart
-  So that I can track items I wish to purchase
+  Como cliente de Sauce Demo
+  Quiero poder agregar productos a mi carrito
+  Para poder llevar un control de los artículos que deseo comprar
 
-  Background:
-    Given I am logged in as "standard_user"
+  Antecedentes:
+    Dado que estoy autenticado como "standard_user"
 
-  # ─── Acceptance Criterion 3 ──────────────────────────────────────────────────
-  Scenario: Add a product to the cart from the products page
-    When I add the product "Sauce Labs Backpack" to the cart
-    Then the cart badge should show "1" item(s)
+  # ─── Criterio de aceptación 3 ───────────────────────────────────────────────
+  Escenario: Agregar un producto al carrito desde la página de productos
+    Cuando agrego el producto "Sauce Labs Backpack" al carrito
+    Entonces el indicador del carrito debe mostrar "1" artículo(s)
 
-  # ─── Acceptance Criterion 4 ──────────────────────────────────────────────────
-  Scenario: View the added products in the shopping cart
-    When I add the product "Sauce Labs Backpack" to the cart
-    And I navigate to the shopping cart
-    Then I should see "Sauce Labs Backpack" in the cart
+  # ─── Criterio de aceptación 4 ───────────────────────────────────────────────
+  Escenario: Ver los productos agregados en el carrito de compras
+    Cuando agrego el producto "Sauce Labs Backpack" al carrito
+    Y navego al carrito de compras
+    Entonces debo ver "Sauce Labs Backpack" en el carrito
