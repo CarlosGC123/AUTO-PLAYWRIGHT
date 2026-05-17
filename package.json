@@ -1,0 +1,24 @@
+{
+  "name": "auto-web-playwright",
+  "version": "1.0.0",
+  "description": "Playwright + Cucumber automation framework for Sauce Demo - Screenplay-inspired pattern",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:login": "cucumber-js --tags @login",
+    "test:shopping": "cucumber-js --tags @shopping",
+    "test:checkout": "cucumber-js --tags @checkout",
+    "report": "node reports/generate.js",
+    "test:report": "cucumber-js && node reports/generate.js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^10.8.0",
+    "@playwright/test": "^1.44.0",
+    "dotenv": "^16.4.5",
+    "multiple-cucumber-html-reporter": "^3.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

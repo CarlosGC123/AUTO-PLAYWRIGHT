@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables (contains credentials)
+.env
+
+# Test reports
+reports/cucumber-report.json
+reports/cucumber-report.html
+reports/html/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Playwright
+test-results/
+playwright-report/
