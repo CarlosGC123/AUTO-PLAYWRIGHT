@@ -58,7 +58,7 @@ BeforeAll({ timeout: 120_000 }, async function () {
 
 // ─── Before (per scenario) ───────────────────────────────────────────────────
 
-Before({ timeout: 30_000 }, async function (this: CustomWorld, scenario) {
+Before(async function (this: CustomWorld, scenario) {
   try {
     FormatoConsola.separador(`Escenario: ${scenario.pickle.name}`);
     FormatoConsola.info('Creando contexto y página para el escenario');
@@ -68,6 +68,8 @@ Before({ timeout: 30_000 }, async function (this: CustomWorld, scenario) {
       viewport: { width: 1280, height: 720 }
     });
     this.page = await this.context.newPage();
+    this.page.setDefaultNavigationTimeout(60_000);
+    this.page.setDefaultTimeout(60_000);
 
     FormatoConsola.exito('Contexto y página listos');
   } catch (error) {
@@ -78,22 +80,24 @@ Before({ timeout: 30_000 }, async function (this: CustomWorld, scenario) {
 
 // ─── After (per scenario) ────────────────────────────────────────────────────
 
-After({ timeout: 30_000 }, async function (this: CustomWorld, scenario) {
+After(async function (this: CustomWorld, scenario) {
   const estado  = scenario.result?.status ?? 'desconocido';
   const nombre  = scenario.pickle.name;
 
   try {
     if (scenario.result?.status === Status.FAILED) {
       FormatoConsola.advertencia(`Escenario FALLIDO: ${nombre}`);
-      FormatoConsola.info('Capturando screenshot del fallo');
-      const screenshotBuffer = await this.page.screenshot({ fullPage: true });
-      await this.attach(screenshotBuffer, 'image/png');
+      if (this.page) {
+        FormatoConsola.info('Capturando screenshot del fallo');
+        const screenshotBuffer = await this.page.screenshot({ fullPage: true });
+        await this.attach(screenshotBuffer, 'image/png');
+      }
     } else {
       FormatoConsola.exito(`Escenario completado [${estado}]: ${nombre}`);
     }
   } finally {
-    await this.page.close();
-    await this.context.close();
+    await this.page?.close().catch(() => {});
+    await this.context?.close().catch(() => {});
     FormatoConsola.info('Contexto y página cerrados');
   }
 });
